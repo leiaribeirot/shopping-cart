@@ -29,9 +29,14 @@ function createProductItemElement({ sku, name, image }) {
 // function getSkuFromProductItem(item) {
 //  return item.querySelector('span.item__sku').innerText;
 // }
+const clickRemoveitem = ({ target }) => {
+  if (target.className === 'cart__item') {
+    target.remove(); 
+  }
+};
 
  function cartItemClickListener() {
-  
+  cartContainer.addEventListener('click', clickRemoveitem);
 }
   //
  function createCartItemElement({ sku, name, salePrice }) {
