@@ -28,6 +28,6 @@ describe('1 - Teste a função fecthProducts', () => {
       await fetchProducts();
     } catch (error) {
       expect(error).toEqual(new Error('É necessario uma URL'));
-    };    
-});
+    };
+  });
 });

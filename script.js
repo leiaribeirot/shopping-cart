@@ -40,4 +40,15 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+// Função Mostrar Itens
+const mostrarItens = async () => {
+  const { results } = await fetchProducts('computer'); // result from async fetch
+  const itemsContainer = document.querySelector('.items'); // where item should be
+  // use forEach
+  results.forEach(({ id: sku, title: name, thumbnail: image }) => {
+    const sectionProduct = createProductItemElement({ sku, name, image });
+    itemsContainer.appendChild(sectionProduct);
+  });
+};
+
+window.onload = () => { mostrarItens(); };
