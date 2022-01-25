@@ -1,5 +1,6 @@
 const totalElement = document.querySelector('.total-price');
 const cartContainer = document.querySelector('.cart__items');
+const itemsElement = document.querySelector('.items');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -72,15 +73,17 @@ const mostrarItens = async () => {
 };
 
 const createCartItem = async () => {
-  // select .item class using addEventListener on click with async
   document.querySelector('.items').addEventListener('click', async (event) => {
-      const et = event.target;// storing result in variable
+    itemsElement.appendChild(createCustomElement('h3', 'loading', 'carregando...'));  
+    const et = event.target;
       if (et.innerText === 'Adicionar ao carrinho!') {
         // if that text is clicked then
-        const buttonID = et.parentNode.firstChild.textContent;// where shouldbe the new childs
-        const { id: sku, title: name, price: salePrice } = await fetchItem(buttonID);// our primise await for this resuts
-        const cart = document.querySelector('.cart__items');// where should put the car items
-        cart.appendChild(createCartItemElement({ sku, name, salePrice })); // apendChild using creatEelent With destructuing from await
+        const buttonID = et.parentNode.firstChild.textContent;
+        const { id: sku, title: name, price: salePrice } = await fetchItem(buttonID);
+        const loadingElement = document.querySelector('.loading');
+        loadingElement.remove();
+        const cart = document.querySelector('.cart__items');
+        cart.appendChild(createCartItemElement({ sku, name, salePrice }));
         refreshTotalPrice();
         saveCartItems(cartContainer.innerHTML);
       }
