@@ -1,3 +1,4 @@
+const totalElement = document.querySelector('.total-price');
 const cartContainer = document.querySelector('.cart__items');
 
 function createProductImageElement(imageSource) {
@@ -25,7 +26,12 @@ function createProductItemElement({ sku, name, image }) {
 
   return section;
 }
-
+function refreshTotalPrice() { 
+  let allPrices = Array.from(document.querySelectorAll('.price')); 
+  allPrices = allPrices.map((el) => parseFloat(el.innerText));  
+  const totalPrice = allPrices.reduce((sum, el) => sum + el, 0); 
+  totalElement.innerText = `${totalPrice}`;
+}
 // function getSkuFromProductItem(item) {
 //  return item.querySelector('span.item__sku').innerText;
 // }
@@ -37,15 +43,21 @@ const clickRemoveitem = ({ target }) => {
 
  function cartItemClickListener() {
   cartContainer.addEventListener('click', clickRemoveitem);
+  refreshTotalPrice(); 
   saveCartItems(cartContainer.innerHTML);
 }
   //
- function createCartItemElement({ sku, name, salePrice }) {
-   const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
+  function createCartItemElement({ sku, name, salePrice }) { 
+    const li = document.createElement('li');
+    const span = document.createElement('span'); 
+    li.className = 'cart__item';
+    li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+    li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $`;
+    span.className = 'price'; 
+    span.innerText = `${salePrice}`; 
+    li.appendChild(span);
+    li.addEventListener('click', cartItemClickListener);
+    return li;
 }
 
 // Função Mostrar Itens
@@ -69,6 +81,7 @@ const createCartItem = async () => {
         const { id: sku, title: name, price: salePrice } = await fetchItem(buttonID);// our primise await for this resuts
         const cart = document.querySelector('.cart__items');// where should put the car items
         cart.appendChild(createCartItemElement({ sku, name, salePrice })); // apendChild using creatEelent With destructuing from await
+        refreshTotalPrice();
         saveCartItems(cartContainer.innerHTML);
       }
   });
@@ -87,6 +100,7 @@ const trashCartItem = () => {
   buttonEmptyCart.addEventListener('click', () => {
     cartContainer.innerHTML = '';
     saveCartItems('');
+    refreshTotalPrice();
   });
 };
 
@@ -95,4 +109,5 @@ window.onload = () => {
   createCartItem();
   showlocalStorage();
   trashCartItem();
+  refreshTotalPrice();
 };
