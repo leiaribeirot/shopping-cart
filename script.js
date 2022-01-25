@@ -1,3 +1,5 @@
+const cartContainer = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -24,16 +26,16 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//  return item.querySelector('span.item__sku').innerText;
+// }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
+ function cartItemClickListener() {
+  
 }
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
+  //
+ function createCartItemElement({ sku, name, salePrice }) {
+   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
@@ -51,4 +53,22 @@ const mostrarItens = async () => {
   });
 };
 
-window.onload = () => { mostrarItens(); };
+const createCartItem = async () => {
+  // select .item class using addEventListener on click with async
+  document.querySelector('.items').addEventListener('click', async (event) => {
+      const et = event.target;// storing result in variable
+      if (et.innerText === 'Adicionar ao carrinho!') {
+        // if that text is clicked then
+        const buttonID = et.parentNode.firstChild.textContent;// where shouldbe the new childs
+        const { id: sku, title: name, price: salePrice } = await fetchItem(buttonID);// our primise await for this resuts
+        const cart = document.querySelector('.cart__items');// where should put the car items
+        cart.appendChild(createCartItemElement({ sku, name, salePrice })); // apendChild using creatEelent With destructuing from await
+        saveCartItems(cartContainer.innerHTML);
+      }
+  });
+};
+
+window.onload = () => { 
+  mostrarItens();
+  createCartItem();
+};
