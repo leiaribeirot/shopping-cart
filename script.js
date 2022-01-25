@@ -37,6 +37,7 @@ const clickRemoveitem = ({ target }) => {
 
  function cartItemClickListener() {
   cartContainer.addEventListener('click', clickRemoveitem);
+  saveCartItems(cartContainer.innerHTML);
 }
   //
  function createCartItemElement({ sku, name, salePrice }) {
@@ -73,7 +74,16 @@ const createCartItem = async () => {
   });
 };
 
+function showlocalStorage() {
+  const cartItems = getSavedCartItems();
+    cartContainer.innerHTML = cartItems;
+    Array.from(cartContainer.children).forEach((result) => {
+      result.addEventListener('click', cartItemClickListener);
+    });
+}
+
 window.onload = () => { 
   mostrarItens();
   createCartItem();
+  showlocalStorage();
 };
