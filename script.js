@@ -82,8 +82,17 @@ function showlocalStorage() {
     });
 }
 
+const trashCartItem = () => {
+  const buttonEmptyCart = document.querySelector('.empty-cart');
+  buttonEmptyCart.addEventListener('click', () => {
+    cartContainer.innerHTML = '';
+    saveCartItems('');
+  });
+};
+
 window.onload = () => { 
   mostrarItens();
   createCartItem();
   showlocalStorage();
+  trashCartItem();
 };
